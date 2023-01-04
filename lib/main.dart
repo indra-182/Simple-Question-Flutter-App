@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import './question.dart';
-import './answer.dart';
+
+import './quiz.dart';
+import './result.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,26 +11,59 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var questionsIndex = 0;
-  static const questions = [
+  final _questions = const [
     {
-      "questionText": "What\'s your favorite color?",
-      "answers": ["Black", "Red", "Green"]
+      "questionText": "Apa ibukota dari negara Indonesia?",
+      "answers": [
+        {"text": "Jakarta", "score": 25},
+        {"text": "Bandung", "score": 0},
+        {"text": "Makassar", "score": 0},
+        {"text": "Medan", "score": 0},
+      ]
     },
     {
-      "questionText": "What\'s your favorite animal?",
-      "answers": ["Horse", "Tiger", "Lion"]
+      "questionText": "Siapa presiden Republik Indonesia yang pertama?",
+      "answers": [
+        {"text": "Jokowi", "score": 0},
+        {"text": "SBY", "score": 0},
+        {"text": "Gusdur", "score": 0},
+        {"text": "Soekarno", "score": 25},
+      ]
     },
     {
-      "questionText": "What\'s your favorite food?",
-      "answers": ["Kebab", "Hamburger", "Pizza"]
+      "questionText": "Hari ulang tahun Pancasila pada tanggal?",
+      "answers": [
+        {"text": "2 Juni", "score": 0},
+        {"text": "1 Juni", "score": 25},
+        {"text": "2 Juli", "score": 0},
+        {"text": "1 Juli", "score": 0},
+      ]
+    },
+    {
+      "questionText": "Hari kemerdekaan Republik Indonesia pada tanggal?",
+      "answers": [
+        {"text": "17 Agustus 1945", "score": 25},
+        {"text": "18 Agustus 1945", "score": 0},
+        {"text": "17 Agustus 1946", "score": 0},
+        {"text": "18 Agustus 1946", "score": 0},
+      ]
     },
   ];
+  var _questionIndex = 0;
+  var _totalScore = 0;
 
-  void answerQuestions() {
+  void _resetQuiz() {
     setState(() {
-      questionsIndex += 1;
-      print(questionsIndex);
+      _questionIndex = 0;
+      _totalScore = 0;
+    });
+  }
+
+  void _answerQuestion(int score) {
+    _totalScore += score;
+
+    setState(() {
+      _questionIndex += 1;
     });
   }
 
@@ -39,20 +73,16 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Simple Question Aps"),
+          centerTitle: true,
+          title: Text('Simple Quiz Apps'),
         ),
-        body: questionsIndex < questions.length
-            ? Column(
-                children: [
-                  Question(questions[questionsIndex]["questionText"]),
-                  ...(questions[questionsIndex]['answers'] as List<String>)
-                      .map((e) => Answer(answerQuestions, e))
-                      .toList()
-                ],
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                answerQuestion: _answerQuestion,
+                questionIndex: _questionIndex,
+                questions: _questions,
               )
-            : Center(
-                child: Text("U did it!"),
-              ),
+            : Result(_totalScore, _resetQuiz),
       ),
     );
   }
