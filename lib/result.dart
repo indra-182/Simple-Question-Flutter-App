@@ -16,15 +16,30 @@ class Result extends StatelessWidget {
     return resultText;
   }
 
+  int get resultsScore {
+    return resultScore;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Container(
+            margin: EdgeInsets.all(10),
+            child: Text(
+              ("Your result is \n$resultsScore"),
+              style: TextStyle(
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
           Text(
             resultPhrase,
-            style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           FlatButton(
